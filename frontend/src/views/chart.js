@@ -1,7 +1,7 @@
 import { useState, useEffect, React } from "react";
 import { Bar, Scatter } from "react-chartjs-2";
 import { SearchOutlined } from '@ant-design/icons';
-import { Select, DatePicker, Button, message, Input } from "antd";
+import { Select, DatePicker, Button, message, Input, Modal } from "antd";
 import {
   Card,
   CardHeader,
@@ -20,33 +20,33 @@ import { timeLabel, monthLabel, weekLabel, seasonLabel } from '../config.js';
 
 const { Option } = Select;
 
-const PickerWithType = ({ type, onChange }) => {
-  if (type === 'season') return (
-    <DatePicker
-      style={{
-        width: "100%",
-      }}
-      picker='year' onChange={onChange} />);
-  if (type === 'date') return <DatePicker
-    style={{
-      width: "100%",
-    }}
-    onChange={onChange} />;
-  return <DatePicker
-    style={{
-      width: "100%",
-    }}
-    picker={type} onChange={onChange} />;
-};
+// const PickerWithType = ({ type, onChange }) => {
+//   if (type === 'season') return (
+//     <DatePicker
+//       style={{
+//         width: "100%",
+//       }}
+//       picker='year' onChange={onChange} />);
+//   if (type === 'date') return <DatePicker
+//     style={{
+//       width: "100%",
+//     }}
+//     onChange={onChange} />;
+//   return <DatePicker
+//     style={{
+//       width: "100%",
+//     }}
+//     picker={type} onChange={onChange} />;
+// };
 
-dayjs.extend(customParseFormat);
+// dayjs.extend(customParseFormat);
 
 const Index = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [type, setType] = useState('year');
-  const [date, setDate] = useState();
+  // const [type, setType] = useState('year');
+  // const [date, setDate] = useState();
   const [location, setLocation] = useState();
   let [search, setSearch] = useState(0);
 
@@ -56,43 +56,62 @@ const Index = () => {
   const [dataBar, setDataBar] = useState();
   const [dataScatter, setDataScatter] = useState();
   const [locationID, setLocationID] = useState();
+  const [seasonData, setSeason] = useState();
+  const [dayData, setDay] = useState();
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
     handleSearch();
   }, [search]);
 
-  const handleChangeDate = (value) => {
-    setDate(value);
-  };
+  // const handleChangeDate = (value) => {
+  //   setDate(value);
+  // };
 
   const onChangeLocation = (e) => {
     if (e.target !== undefined) setLocation(e.target.value);
     else setLocation(e.name);
   }
 
+  const onChangeSeason  = (value) => {
+    setSeason(value);
+  }
+
+  const onChangeDay = (value) => {
+    setDay(value)
+  }
+
   const datasetKeyProvider = () => {
     return "Not";
   }
 
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
+  };
+
   const handleSearch = () => {
+    setTimeout(function() {
+      setOpen(true)
+    }, 5000);
     if (!location) {
       return;
     }
     let data;
-    if (type === 'season') {
-      data = {
-        type: type,
-        date: date.$y,
-        location: locationID
-      }
-    } else {
-      data = {
-        type: type,
-        date: date,
-        location: locationID
-      }
+    data = {
+      location: locationID,
+      season: seasonData,
+      day: dayData
     }
-    console.log("Data:", data);
 
     let result;
     axios.post(process.env.REACT_APP_API_URL + "/survey/getSurvey", data)
@@ -101,68 +120,12 @@ const Index = () => {
           result = res.data.result;
           console.log("Result:", result);
           let label, barData;
-          switch (type) {
-            case 'date': {
-              label = timeLabel;
-              let arr = new Array(6).fill(0);
-              result.forEach(data => {
-                arr[data.time - 1]++;
-              })
-              barData = arr;
-              break;
-            }
-            case 'month': {
-              label = weekLabel;
-              let arr = new Array(5).fill(0);
-              result.forEach(data => {
-                let day = parseInt(result[0].date.slice(8,10))
-                if(day<8 && day>0) arr[0]++;
-                else if(day<15 && day>7) arr[1]++;
-                else if(day<22 && day>14) arr[2]++;
-                else if(day<29 && day>21) arr[3]++;
-                else arr[4]++;
-              })
-              barData = arr;
-              break;
-            }
-            case 'year': {
-              label = monthLabel;
-              let arr = new Array(12).fill(0);
-              result.forEach(data => {
-                let month = parseInt(data.date.slice(5,7))
-                arr[month - 1]++;
-              })
-              barData = arr;
-              break;
-            }
-            case 'season': {
-              label = seasonLabel;
-              let arr = new Array(4).fill(0);
-              result.forEach(data => {
-                switch (data.season) {
-                  case 'Spring':
-                    arr[0]++;
-                    break;
-                  case 'Summer':
-                    arr[1]++;
-                    break;
-                  case 'Fall':
-                    arr[2]++;
-                    break;
-                  case 'Winter':
-                    arr[3]++;
-                    break;
-                  default: break;
-                }
-              })
-              barData = arr;
-              break;
-            }
-            default: {
-              label = monthLabel;
-              break;
-            }
-          }
+          label = timeLabel;
+          let arr = new Array(6).fill(0);
+          result.forEach(data => {
+            arr[data.time - 1]++;
+          })
+          barData = arr;
 
           setLabels(label);
 
@@ -270,35 +233,69 @@ const Index = () => {
           <div className="header-body">
             <Row>
               <Col lg="6" xl="2">
-                <h3 style={{ color: "white" }}>Search Option:</h3>
+                <h3 style={{ color: "white", textAlign: "end" }}>Search Option:</h3>
               </Col>
               <Col lg="6" xl="2">
                 <Input
                   id="searchTextField"
                   onChange={onChangeLocation}
                   value={location ? location : ''}
-                  placeholder="Input park name"
+                  placeholder="Name of park you want"
                 />
               </Col>
               <Col lg="6" xl="2">
                 <Select
-                  style={{
-                    width: "100%",
-                  }}
-                  value={type}
-                  onChange={setType}
-                >
-                  <Option value="date">Date</Option>
-                  <Option value="month">Month</Option>
-                  <Option value="season">Season</Option>
-                  <Option value="year">Year</Option>
-                </Select>
+                placeholder="Select the level"
+                style={{ width: "100%" }}
+                onChange={onChangeSeason}
+                options={[
+                  {
+                    value: "Spring",
+                    label: "Spring",
+                  },
+                  {
+                    value: "Summer",
+                    label: "Summer",
+                  },
+                  {
+                    value: "Fall",
+                    label: "Fall",
+                  },
+                  {
+                    value: "Winter",
+                    label: "Winter",
+                  },
+                ]}
+              />
               </Col>
               <Col lg="6" xl="2">
-                <PickerWithType
-                  type={type}
-                  onChange={handleChangeDate}
-                />
+                <Select
+                placeholder="What day(s) do you go?"
+                style={{ width: "100%" }}
+                onChange={onChangeDay}
+                options={[
+                  {
+                    value: "Monday",
+                    label: "Monday",
+                  },
+                  {
+                    value: "Tuesday",
+                    label: "Tuesday",
+                  },
+                  {
+                    value: "Wednesday",
+                    label: "Wednesday",
+                  },
+                  {
+                    value: "Thursday",
+                    label: "Thursday",
+                  },
+                  {
+                    value: "Friday",
+                    label: "Friday",
+                  },
+                ]}
+              />
               </Col>
               <Col lg="6" xl="1">
                 <Button icon={<SearchOutlined />} onClick={() => {
@@ -351,6 +348,15 @@ const Index = () => {
             </Card>
           </Col>
         </Row>
+        <Modal
+          title="Sign In"
+          open={open}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}
+        >
+          
+        </Modal>
       </Container>
 
     </>

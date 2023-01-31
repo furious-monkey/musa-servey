@@ -1,37 +1,40 @@
 import { useEffect, useState } from "react";
 import Chart from "chart.js";
-import { Form, Select, DatePicker, Input, Button } from "antd";
+import { Select, DatePicker, Input, Button, Row, Col } from "antd";
+import { PlusOutlined, ArrowRightOutlined, MinusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import axios from "axios";
 import dayjs from "dayjs";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Container,
-  Row
-} from "reactstrap";
-import {
-  chartOptions,
-  parseOptions
-} from "variables/charts.js";
+import { Card, CardHeader, CardBody, Container } from "reactstrap";
+import { chartOptions, parseOptions } from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
 
 dayjs.extend(customParseFormat);
 const baseURL = process.env.REACT_APP_API_URL;
 var place;
+const levelSendData = [];
+const daySendData = [];
+const timeSendData = [];
+const seasonSendData = [];
+const locationSendID = [];
 
-const Index = (props) => {
-  let history = useHistory();
-
+const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
   const [levelData, setLevel] = useState();
   const [locationData, setLocation] = useState();
-  const [dateData, setDate] = useState();
+  const [dayData, setDay] = useState();
   const [timeData, setTime] = useState();
   const [seasonData, setSeason] = useState();
   const [locationID, setLocationID] = useState();
+  const [addState, setAddState] = useState(true);
+
+  useEffect(() => {
+    if(levelData && dayData && timeData && seasonData && locationID)
+      setAddState(false)
+    else
+      setAddState(true)
+  })
 
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
@@ -46,40 +49,26 @@ const Index = (props) => {
   const onChangeSeason = (value) => {
     setSeason(value);
   };
-  const onChangeDate = (date, dateString) => {
-    setDate(dateString);
+  const onChangeDay = (value) => {
+    setDay(value);
   };
   const onChangeLocation = (e) => {
     if (e.target !== undefined) setLocation(e.target.value);
     else setLocation(e.name);
-  }
+  };
   const disabledDate = (current) => {
     return current < dayjs().endOf("day");
   };
-
-  const onFinish = () => {
-    const addData = {
-      level: levelData,
-      location: locationID,
-      date: dateData,
-      time: timeData,
-      season: seasonData,
-    };
-    axios.post(baseURL + "/survey/createSurvey", addData)
-      .then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      })
-    history.push("/admin/chart");
-    window.location.reload()
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
+  const addColsHandler = () => {
+    levelSendData.push(levelData)
+    daySendData.push(dayData)
+    timeSendData.push(timeData)
+    seasonSendData.push(seasonData)
+    locationSendID.push(locationID)
+    addColsHandle()
+  }
   let google = window.google;
-  let input = document.getElementById('searchTextField');
+  let input = document.getElementById("searchTextField"+cardIndex);
   const autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.addListener("place_changed", () => {
     place = autocomplete.getPlace();
@@ -90,16 +79,190 @@ const Index = (props) => {
     onChangeLocation({
       name: place.name,
       address: place.formatted_address,
-      id: place.place_id
+      id: place.place_id,
     });
     setLocationID(place.place_id);
   });
+  return (
+    <>
+      <Col span={24}>
+        <Card style={{border: 'none'}}>
+          <Row gutter={[3, 8]}>
+            <Col span={4} offset={2}>
+              <Input
+                style={{ width: "100%" }}
+                id={"searchTextField"+cardIndex}
+                onChange={onChangeLocation}
+                value={locationData ? locationData : ""}
+                placeholder="What park do you go to?"
+              />
+            </Col>
+            <Col span={4}>
+              <Select
+                placeholder="What day(s) do you go?"
+                style={{ width: "100%" }}
+                onChange={onChangeDay}
+                options={[
+                  {
+                    value: "Monday",
+                    label: "Monday",
+                  },
+                  {
+                    value: "Tuesday",
+                    label: "Tuesday",
+                  },
+                  {
+                    value: "Wednesday",
+                    label: "Wednesday",
+                  },
+                  {
+                    value: "Thursday",
+                    label: "Thursday",
+                  },
+                  {
+                    value: "Friday",
+                    label: "Friday",
+                  },
+                ]}
+              />
+            </Col>
+            <Col span={4}>
+              <Select
+                placeholder="Select Time"
+                style={{ width: "100%" }}
+                onChange={onChangeTime}
+                options={[
+                  {
+                    value: 1,
+                    label: "04:00am-08:00am",
+                  },
+                  {
+                    value: 2,
+                    label: "08:00am-12:00pm",
+                  },
+                  {
+                    value: 3,
+                    label: "01:00pm-04:00pm",
+                  },
+                  {
+                    value: 4,
+                    label: "04:00pm-07:00pm",
+                  },
+                  {
+                    value: 5,
+                    label: "07:00pm-10:00pm",
+                  },
+                  {
+                    value: 6,
+                    label: "10:00pm-until later",
+                  },
+                ]}
+              />
+            </Col>
+            <Col span={4}>
+              <Select
+                placeholder="Select the level"
+                style={{ width: "100%" }}
+                onChange={onChangeLevel}
+                options={[
+                  {
+                    value: "Beginner",
+                    label: "Beginner",
+                  },
+                  {
+                    value: "Intermediary",
+                    label: "Intermediary",
+                  },
+                  {
+                    value: "Advanced",
+                    label: "Advanced",
+                  },
+                ]}
+              />
+            </Col>
+            <Col span={4}>
+              <Select
+                placeholder="Select the level"
+                style={{ width: "100%" }}
+                onChange={onChangeSeason}
+                options={[
+                  {
+                    value: "Spring",
+                    label: "Spring",
+                  },
+                  {
+                    value: "Summer",
+                    label: "Summer",
+                  },
+                  {
+                    value: "Fall",
+                    label: "Fall",
+                  },
+                  {
+                    value: "Winter",
+                    label: "Winter",
+                  },
+                ]}
+              />
+            </Col>
+            <Col style={{textAlignLast: `revert`}} span={2}>
+              {
+                cardIndex === totalCount
+                ? <Button type="primary" disabled={addState} shape="circle" onClick={addColsHandler} style={{marginTop: '4px', marginLeft:"10px"}} icon={<PlusOutlined style={{display:"block"}} />} size={"small"} />
+                : <></>
+              }
+            </Col>
+          </Row>
+        </Card>
+      </Col>
+    </>
+  );
+};
+
+const Index = (props) => {
+  let history = useHistory();
+
+  const [levelData, setLevel] = useState();
+  const [locationData, setLocation] = useState();
+  const [dateData, setDate] = useState();
+  const [timeData, setTime] = useState();
+  const [seasonData, setSeason] = useState();
+  const [locationID, setLocationID] = useState();
+  const [colCount, setColCount] = useState(1);
+
+  let cols = [];
+  for(let i = 0; i < colCount; i++){
+    cols.push(<CardItem key={i} cardIndex={i} totalCount={colCount-1} addColsHandle = {() => {
+      setColCount(colCount+1);
+    }} />)
+  }
+
+  const onFinish = () => {
+    const addData = {
+      level: levelSendData,
+      location: locationSendID,
+      day: daySendData,
+      time: timeSendData,
+      season: seasonSendData,
+    };
+    axios
+      .post(baseURL + "/survey/createSurvey", addData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(levelSendData, seasonSendData, timeSendData, daySendData, locationSendID);
+    history.push("/admin/chart");
+    window.location.reload();
+  };
 
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
-        <Card className="shadow" style={{ height: `600px` }}>
+      <Container fluid style={{paddingTop: '5%', paddingBottom: '20%'}}>
+        <Card className="shadow">
           <CardHeader className="bg-transparent">
             <Row className="align-items-center">
               <div className="col">
@@ -111,153 +274,14 @@ const Index = (props) => {
             </Row>
           </CardHeader>
           <CardBody>
-            <Form
-              labelCol={{ span: 8 }}
-              wrapperCol={{ span: 12 }}
-              layout="horizontal"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <Form.Item
-                label="Park"
-              >
-                <Input
-                  id="searchTextField"
-                  onChange={onChangeLocation}
-                  value={locationData ? locationData : ''}
-                  placeholder="Input park name"
-                />
-              </Form.Item>
-              <Form.Item
-                style={{ fontSize: 20 }}
-                label="Level"
-                name="player"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your level!",
-                  },
-                ]}
-              >
-                <Select
-                  onChange={onChangeLevel}
-                  options={[
-                    {
-                      value: "Beginner",
-                      label: "Beginner",
-                    },
-                    {
-                      value: "Intermediary",
-                      label: "Intermediary",
-                    },
-                    {
-                      value: "Advanced",
-                      label: "Advanced",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                name="date"
-                label="Date"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your date!",
-                  },
-                ]}
-              >
-                <DatePicker
-                  format="YYYY-MM-DD"
-                  onChange={onChangeDate}
-                  disabledDate={disabledDate}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-              <Form.Item
-                name="time"
-                label="Time"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your time!",
-                  },
-                ]}
-              >
-                <Select
-                  onChange={onChangeTime}
-                  options={[
-                    {
-                      value: 1,
-                      label: "08:00am-10:00am",
-                    },
-                    {
-                      value: 2,
-                      label: "10:00am-12:00pm",
-                    },
-                    {
-                      value: 3,
-                      label: "12:00pm-02:00pm",
-                    },
-                    {
-                      value: 4,
-                      label: "03:00pm-05:00pm",
-                    },
-                    {
-                      value: 5,
-                      label: "06:00pm-08:00pm",
-                    },
-                    {
-                      value: 6,
-                      label: "09:00pm-11:00pm",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                name="season"
-                label="Season"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input season!",
-                  },
-                ]}
-              >
-                <Select
-                  onChange={onChangeSeason}
-                  options={[
-                    {
-                      value: "Spring",
-                      label: "Spring",
-                    },
-                    {
-                      value: "Summer",
-                      label: "Summer",
-                    },
-                    {
-                      value: "Fall",
-                      label: "Fall",
-                    },
-                    {
-                      value: "Winter",
-                      label: "Winter",
-                    },
-                  ]}
-                />
-              </Form.Item>
-
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16
-                }}
-              >
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
+            <Row gutter={[0, 8]}>
+              {cols}
+            </Row>
+            <Row style={{marginTop:"20px"}}>
+              <Col span={2} offset={20}>
+                <Button type="primary" shape="round" size={"large"} onClick={onFinish}>Continue<ArrowRightOutlined style={{display: `inline-flex`}} /></Button>
+              </Col>
+            </Row>
           </CardBody>
         </Card>
       </Container>
