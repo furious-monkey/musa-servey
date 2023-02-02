@@ -59,6 +59,7 @@ const Index = () => {
   const [seasonData, setSeason] = useState();
   const [dayData, setDay] = useState();
   const [open, setOpen] = useState(false);
+  const [first, setFirst] = useState(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
@@ -100,9 +101,6 @@ const Index = () => {
   };
 
   const handleSearch = () => {
-    setTimeout(function() {
-      setOpen(true)
-    }, 5000);
     if (!location) {
       return;
     }
@@ -117,6 +115,12 @@ const Index = () => {
     axios.post(process.env.REACT_APP_API_URL + "/survey/getSurvey", data)
       .then(res => {
         if(res.data.success) {
+          setTimeout(function() {
+            if(first) {
+              setFirst(false)
+              setOpen(true)
+            }
+          }, 5000);
           result = res.data.result;
           console.log("Result:", result);
           let label, barData;

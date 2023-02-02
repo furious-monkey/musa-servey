@@ -64,8 +64,6 @@
     "react-router-dom": "^5.2.0",
     "react-script-tag": "^1.1.2",
     "react-scripts": "^5.0.1",
-    "react-social-login-buttons": "^3.6.1",
-    "reactjs-social-login": "^2.6.2",
     "reactstrap": "8.9.0",
     "sass": "1.54.5",
     "supertokens-auth-react": "^0.30.2"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Chart from "chart.js";
-import { Select, DatePicker, Input, Button, Row, Col } from "antd";
+import { Select, DatePicker, Input, Button, Row, Col, message } from "antd";
 import { PlusOutlined, ArrowRightOutlined, MinusOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -229,6 +229,7 @@ const Index = (props) => {
   const [seasonData, setSeason] = useState();
   const [locationID, setLocationID] = useState();
   const [colCount, setColCount] = useState(1);
+  const [messageApi, contextHolder] = message.useMessage();
 
   let cols = [];
   for(let i = 0; i < colCount; i++){
@@ -245,21 +246,30 @@ const Index = (props) => {
       time: timeSendData,
       season: seasonSendData,
     };
-    axios
-      .post(baseURL + "/survey/createSurvey", addData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+    console.log(addData)
+    if(!locationSendID.length || !levelSendData.length || !daySendData.length || !timeSendData.length || !seasonSendData.length) {
+      messageApi.open({
+        type: 'error',
+        content: 'Please input at least one field set and click PLUS (+) button.',
       });
-    console.log(levelSendData, seasonSendData, timeSendData, daySendData, locationSendID);
-    history.push("/admin/chart");
-    window.location.reload();
+    } else {
+      axios
+        .post(baseURL + "/survey/createSurvey", addData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(levelSendData, seasonSendData, timeSendData, daySendData, locationSendID);
+      history.push("/admin/chart");
+      window.location.reload();
+    }
   };
 
   return (
     <>
+      {contextHolder}
       <Header />
       <Container fluid style={{paddingTop: '5%', paddingBottom: '20%'}}>
         <Card className="shadow">

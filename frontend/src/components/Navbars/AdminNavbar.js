@@ -1,26 +1,23 @@
 import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Button, Modal } from "antd";
-import { UserOutlined } from '@ant-design/icons';
+import { Button, Modal, Form, Input, Checkbox, Tabs, message } from "antd";
+import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import {
   Navbar,
   Container
 } from "reactstrap";
-import {
-  LoginSocialGoogle,
-  LoginSocialFacebook
-} from 'reactjs-social-login';
-import {
-  FacebookLoginButton,
-  GoogleLoginButton
-} from 'react-social-login-buttons';
+import axios from "axios";
+
+const baseURL = process.env.REACT_APP_API_URL;
 
 const AdminNavbar = (props) => {
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [provider, setProvider] = useState('')
-  const [profile, setProfile] = useState(null)
+  const [provider, setProvider] = useState('');
+  const [profile, setProfile] = useState(null);
+  const [loginstate, setLoginState] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onLoginStart = useCallback(() => {
     alert('login start')
@@ -49,8 +46,203 @@ const AdminNavbar = (props) => {
     setOpen(false);
   };
 
+  const onFinish = (value) => {
+    console.log(value)
+    if(value.email) {
+      axios
+        .post(baseURL + "/user/signin", {
+          email: value.email,
+          password: value.password,
+          remember: value.remember ? 1 : 0
+        })
+        .then((res) => {
+          if(res.data.success) {
+            messageApi.open({
+              type: 'success',
+              content: 'Sign in successed.',
+            });
+            setOpen(false);
+          } else {
+            messageApi.open({
+              type: 'error',
+              content: res.data.error,
+            });
+          }
+        })
+        .catch((err) => {
+          messageApi.open({
+            type: 'error',
+            content: 'Error occured.',
+          });
+        });
+    }
+    else {
+      axios
+        .post(baseURL + "/user/signup", {
+          email: value.registeremail,
+          password: value.registerpassword,
+          remember: 0
+        })
+        .then((res) => {
+          if(res.data.success) {
+            messageApi.open({
+              type: 'success',
+              content: 'Sign up successed.',
+            });
+            setOpen(false);
+          } else {
+            messageApi.open({
+              type: 'error',
+              content: res.data.error,
+            });
+          }
+        })
+        .catch((err) => {
+          messageApi.open({
+            type: 'error',
+            content: 'Error occured.',
+          });
+        });
+    }
+  }
+
+  const onChange = (key) => {
+    console.log(key);
+  };
+
+  const items = [
+    {
+      key: '1',
+      label: `SignIn`,
+      children: 
+        (<Form
+          style ={{marginTop:"30px"}}
+          name="normal_login"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!',
+              },
+            ]}
+          >
+            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Useremail" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: 'Please input your Password!' }]}
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style = {{width: "100%"}} className="login-form-button">
+              Sign In
+            </Button>
+          </Form.Item>
+          <hr />
+        </Form>
+      ),
+    },
+    {
+      key: '2',
+      label: `SignUp`,
+      children: 
+        (<Form
+          style ={{marginTop:"30px"}}
+          name="normal_login"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="registeremail"
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!',
+              },
+            ]}
+          >
+            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Useremail" />
+          </Form.Item>
+          <Form.Item
+            name="registerpassword"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item
+            name="confirm"
+            dependencies={['registerpassword']}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: 'Please confirm your password!',
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('registerpassword') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                },
+              }),
+            ]}
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style = {{width: "100%"}} className="login-form-button">
+              Sign Up
+            </Button>
+          </Form.Item>
+        </Form>
+      ),
+    }
+  ];
+
   return (
     <>
+    {contextHolder}
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
           <Link
@@ -68,36 +260,10 @@ const AdminNavbar = (props) => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        footer={null}
+        width={400}
       >
-        <LoginSocialFacebook
-          isOnlyGetToken
-          appId={process.env.REACT_APP_FB_APP_ID || ''}
-          onLoginStart={onLoginStart}
-          onResolve={({ provider, data }) => {
-            setProvider(provider)
-            setProfile(data)
-          }}
-          onReject={(err) => {
-            console.log(err)
-          }}
-        >
-          <FacebookLoginButton />
-        </LoginSocialFacebook>
-
-        <LoginSocialGoogle
-          isOnlyGetToken
-          client_id={process.env.REACT_APP_GG_APP_ID || ''}
-          onLoginStart={onLoginStart}
-          onResolve={({ provider, data }) => {
-            setProvider(provider)
-            setProfile(data)
-          }}
-          onReject={(err) => {
-            console.log(err)
-          }}
-        >
-          <GoogleLoginButton />
-        </LoginSocialGoogle>
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
       </Modal>
     </>
   );

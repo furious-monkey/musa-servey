@@ -3,11 +3,13 @@ const mysql = require("mysql");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const survey_routes = require("./routes/survey.routes");
+const user_routes = require("./routes/user.routes");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/api/survey", survey_routes);
+app.use("/api/user", user_routes);
 
 global.db = mysql.createConnection({
   user: "root",
