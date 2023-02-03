@@ -116,7 +116,7 @@ const Index = () => {
       .then(res => {
         if(res.data.success) {
           setTimeout(function() {
-            if(first) {
+            if(first && !localStorage.getItem('signin')) {
               setFirst(false)
               setOpen(true)
             }
