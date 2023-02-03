@@ -12,14 +12,14 @@ var routes = [
   },
   {
     path: "/index",
-    name: "Musa Survey",
+    name: "Musa Technology",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
     layout: "/admin"
   },
   {
     path: "/chart",
-    name: "Musa Survey",
+    name: "Musa Technology",
     icon: "ni ni-tv-2 text-primary",
     component: Chart,
     layout: "/admin"

@@ -13,6 +13,7 @@ const baseURL = process.env.REACT_APP_API_URL;
 const AdminNavbar = (props) => {
 
   const [open, setOpen] = useState(false);
+  const [signin, setSignin] = useState(localStorage.getItem('signin')?true:false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [provider, setProvider] = useState('');
   const [profile, setProfile] = useState(null);
@@ -61,6 +62,8 @@ const AdminNavbar = (props) => {
               type: 'success',
               content: 'Sign in successed.',
             });
+            localStorage.setItem('signin', true);
+            setSignin(true);
             setOpen(false);
           } else {
             messageApi.open({
@@ -251,7 +254,8 @@ const AdminNavbar = (props) => {
           >
             {props.brandText}
           </Link>
-          <Button shape="round" size={"large"} onClick={showModal}><UserOutlined style={{display: `inline-flex`}} />SignIn/SignUp</Button>
+          {console.log(signin)}
+          {!signin?<Button shape="round" size={"large"} onClick={showModal}><UserOutlined style={{display: `inline-flex`}} />SignIn/SignUp</Button>:<UserOutlined />}
         </Container>
       </Navbar>
       <Modal
