@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Modal, Form, Input, Checkbox, Tabs, message } from "antd";
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -13,22 +13,9 @@ const baseURL = process.env.REACT_APP_API_URL;
 const AdminNavbar = (props) => {
 
   const [open, setOpen] = useState(false);
-  const [signin, setSignin] = useState(localStorage.getItem('signin')?true:false);
+  const [signin, setSignin] = useState(localStorage.getItem('signin') ? true : false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [provider, setProvider] = useState('');
-  const [profile, setProfile] = useState(null);
-  const [loginstate, setLoginState] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
-  const onLoginStart = useCallback(() => {
-    alert('login start')
-  }, [])
-
-  const onLogoutSuccess = useCallback(() => {
-    setProfile(null)
-    setProvider('')
-    alert('logout success')
-  }, [])
 
   const showModal = () => {
     setOpen(true);
@@ -49,7 +36,7 @@ const AdminNavbar = (props) => {
 
   const onFinish = (value) => {
     console.log(value)
-    if(value.email) {
+    if (value.email) {
       axios
         .post(baseURL + "/user/signin", {
           email: value.email,
@@ -57,7 +44,7 @@ const AdminNavbar = (props) => {
           remember: value.remember ? 1 : 0
         })
         .then((res) => {
-          if(res.data.success) {
+          if (res.data.success) {
             messageApi.open({
               type: 'success',
               content: 'Sign in successed.',
@@ -87,7 +74,7 @@ const AdminNavbar = (props) => {
           remember: 0
         })
         .then((res) => {
-          if(res.data.success) {
+          if (res.data.success) {
             messageApi.open({
               type: 'success',
               content: 'Sign up successed.',
@@ -117,9 +104,9 @@ const AdminNavbar = (props) => {
     {
       key: '1',
       label: `SignIn`,
-      children: 
+      children:
         (<Form
-          style ={{marginTop:"30px"}}
+          style={{ marginTop: "30px" }}
           name="normal_login"
           className="login-form"
           initialValues={{ remember: true }}
@@ -157,20 +144,20 @@ const AdminNavbar = (props) => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style = {{width: "100%"}} className="login-form-button">
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }} className="login-form-button">
               Sign In
             </Button>
           </Form.Item>
           <hr />
         </Form>
-      ),
+        ),
     },
     {
       key: '2',
       label: `SignUp`,
-      children: 
+      children:
         (<Form
-          style ={{marginTop:"30px"}}
+          style={{ marginTop: "30px" }}
           name="normal_login"
           className="login-form"
           initialValues={{ remember: true }}
@@ -234,18 +221,18 @@ const AdminNavbar = (props) => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style = {{width: "100%"}} className="login-form-button">
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }} className="login-form-button">
               Sign Up
             </Button>
           </Form.Item>
         </Form>
-      ),
+        ),
     }
   ];
 
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
           <Link
@@ -255,7 +242,7 @@ const AdminNavbar = (props) => {
             {props.brandText}
           </Link>
           {console.log(signin)}
-          {!signin?<Button shape="round" size={"large"} onClick={showModal}><UserOutlined style={{display: `inline-flex`}} />SignIn/SignUp</Button>:<UserOutlined />}
+          {!signin ? <Button shape="round" size={"large"} onClick={showModal}><UserOutlined style={{ display: `inline-flex` }} />SignIn/SignUp</Button> : <UserOutlined />}
         </Container>
       </Navbar>
       <Modal

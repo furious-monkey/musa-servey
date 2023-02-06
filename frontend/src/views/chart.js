@@ -1,7 +1,7 @@
 import { useState, useEffect, React } from "react";
 import { Bar, Scatter } from "react-chartjs-2";
 import { SearchOutlined } from '@ant-design/icons';
-import { Select, DatePicker, Button, message, Input, Modal } from "antd";
+import { Select, Button, message, Input, Modal } from "antd";
 import {
   Card,
   CardHeader,
@@ -10,36 +10,10 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import axios from "axios";
 import { faker } from '@faker-js/faker';
 
-import { timeLabel, monthLabel, weekLabel, seasonLabel } from '../config.js';
-
-const { Option } = Select;
-
-// const PickerWithType = ({ type, onChange }) => {
-//   if (type === 'season') return (
-//     <DatePicker
-//       style={{
-//         width: "100%",
-//       }}
-//       picker='year' onChange={onChange} />);
-//   if (type === 'date') return <DatePicker
-//     style={{
-//       width: "100%",
-//     }}
-//     onChange={onChange} />;
-//   return <DatePicker
-//     style={{
-//       width: "100%",
-//     }}
-//     picker={type} onChange={onChange} />;
-// };
-
-// dayjs.extend(customParseFormat);
+import { timeLabel } from '../config.js';
 
 const Index = () => {
 
@@ -75,7 +49,7 @@ const Index = () => {
     else setLocation(e.name);
   }
 
-  const onChangeSeason  = (value) => {
+  const onChangeSeason = (value) => {
     setSeason(value);
   }
 
@@ -114,9 +88,9 @@ const Index = () => {
     let result;
     axios.post(process.env.REACT_APP_API_URL + "/survey/getSurvey", data)
       .then(res => {
-        if(res.data.success) {
-          setTimeout(function() {
-            if(first && !localStorage.getItem('signin')) {
+        if (res.data.success) {
+          setTimeout(function () {
+            if (first && !localStorage.getItem('signin')) {
               setFirst(false)
               setOpen(true)
             }
@@ -249,57 +223,57 @@ const Index = () => {
               </Col>
               <Col lg="6" xl="2">
                 <Select
-                placeholder="Select the level"
-                style={{ width: "100%" }}
-                onChange={onChangeSeason}
-                options={[
-                  {
-                    value: "Spring",
-                    label: "Spring",
-                  },
-                  {
-                    value: "Summer",
-                    label: "Summer",
-                  },
-                  {
-                    value: "Fall",
-                    label: "Fall",
-                  },
-                  {
-                    value: "Winter",
-                    label: "Winter",
-                  },
-                ]}
-              />
+                  placeholder="Select the level"
+                  style={{ width: "100%" }}
+                  onChange={onChangeSeason}
+                  options={[
+                    {
+                      value: "Spring",
+                      label: "Spring",
+                    },
+                    {
+                      value: "Summer",
+                      label: "Summer",
+                    },
+                    {
+                      value: "Fall",
+                      label: "Fall",
+                    },
+                    {
+                      value: "Winter",
+                      label: "Winter",
+                    },
+                  ]}
+                />
               </Col>
               <Col lg="6" xl="2">
                 <Select
-                placeholder="What day(s) do you go?"
-                style={{ width: "100%" }}
-                onChange={onChangeDay}
-                options={[
-                  {
-                    value: "Monday",
-                    label: "Monday",
-                  },
-                  {
-                    value: "Tuesday",
-                    label: "Tuesday",
-                  },
-                  {
-                    value: "Wednesday",
-                    label: "Wednesday",
-                  },
-                  {
-                    value: "Thursday",
-                    label: "Thursday",
-                  },
-                  {
-                    value: "Friday",
-                    label: "Friday",
-                  },
-                ]}
-              />
+                  placeholder="What day(s) do you go?"
+                  style={{ width: "100%" }}
+                  onChange={onChangeDay}
+                  options={[
+                    {
+                      value: "Monday",
+                      label: "Monday",
+                    },
+                    {
+                      value: "Tuesday",
+                      label: "Tuesday",
+                    },
+                    {
+                      value: "Wednesday",
+                      label: "Wednesday",
+                    },
+                    {
+                      value: "Thursday",
+                      label: "Thursday",
+                    },
+                    {
+                      value: "Friday",
+                      label: "Friday",
+                    },
+                  ]}
+                />
               </Col>
               <Col lg="6" xl="1">
                 <Button icon={<SearchOutlined />} onClick={() => {
@@ -359,7 +333,7 @@ const Index = () => {
           confirmLoading={confirmLoading}
           onCancel={handleCancel}
         >
-          
+
         </Modal>
       </Container>
 
