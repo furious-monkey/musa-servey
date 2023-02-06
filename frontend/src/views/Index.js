@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Chart from "chart.js";
-import { Select, DatePicker, Input, Button, Row, Col, message } from "antd";
-import { PlusOutlined, ArrowRightOutlined, MinusOutlined } from '@ant-design/icons';
+import { Select, Input, Button, Row, Col, message } from "antd";
+import { PlusOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router-dom";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import axios from "axios";
@@ -20,7 +20,7 @@ const timeSendData = [];
 const seasonSendData = [];
 const locationSendID = [];
 
-const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
+const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) => {
   const [levelData, setLevel] = useState();
   const [locationData, setLocation] = useState();
   const [dayData, setDay] = useState();
@@ -30,7 +30,7 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
   const [addState, setAddState] = useState(true);
 
   useEffect(() => {
-    if(levelData && dayData && timeData && seasonData && locationID)
+    if (levelData && dayData && timeData && seasonData && locationID)
       setAddState(false)
     else
       setAddState(true)
@@ -56,9 +56,6 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
     if (e.target !== undefined) setLocation(e.target.value);
     else setLocation(e.name);
   };
-  const disabledDate = (current) => {
-    return current < dayjs().endOf("day");
-  };
   const addColsHandler = () => {
     levelSendData.push(levelData)
     daySendData.push(dayData)
@@ -68,7 +65,7 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
     addColsHandle()
   }
   let google = window.google;
-  let input = document.getElementById("searchTextField"+cardIndex);
+  let input = document.getElementById("searchTextField" + cardIndex);
   const autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.addListener("place_changed", () => {
     place = autocomplete.getPlace();
@@ -86,12 +83,12 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
   return (
     <>
       <Col span={24}>
-        <Card style={{border: 'none'}}>
+        <Card style={{ border: 'none' }}>
           <Row gutter={[3, 8]}>
             <Col span={4} offset={2}>
               <Input
                 style={{ width: "100%" }}
-                id={"searchTextField"+cardIndex}
+                id={"searchTextField" + cardIndex}
                 onChange={onChangeLocation}
                 value={locationData ? locationData : ""}
                 placeholder="What park do you go to?"
@@ -205,11 +202,11 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
                 ]}
               />
             </Col>
-            <Col style={{textAlignLast: `revert`}} span={2}>
+            <Col style={{ textAlignLast: `revert` }} span={2}>
               {
                 cardIndex === totalCount
-                ? <Button type="primary" disabled={addState} shape="circle" onClick={addColsHandler} style={{marginTop: '4px', marginLeft:"10px"}} icon={<PlusOutlined style={{display:"block"}} />} size={"small"} />
-                : <></>
+                  ? <Button type="primary" disabled={addState} shape="circle" onClick={addColsHandler} style={{ marginTop: '4px', marginLeft: "10px" }} icon={<PlusOutlined style={{ display: "block" }} />} size={"small"} />
+                  : <></>
               }
             </Col>
           </Row>
@@ -222,19 +219,13 @@ const CardItem = ({cardIndex, totalCount, addColsHandle, removeColsHandle}) => {
 const Index = (props) => {
   let history = useHistory();
 
-  const [levelData, setLevel] = useState();
-  const [locationData, setLocation] = useState();
-  const [dateData, setDate] = useState();
-  const [timeData, setTime] = useState();
-  const [seasonData, setSeason] = useState();
-  const [locationID, setLocationID] = useState();
   const [colCount, setColCount] = useState(1);
   const [messageApi, contextHolder] = message.useMessage();
 
   let cols = [];
-  for(let i = 0; i < colCount; i++){
-    cols.push(<CardItem key={i} cardIndex={i} totalCount={colCount-1} addColsHandle = {() => {
-      setColCount(colCount+1);
+  for (let i = 0; i < colCount; i++) {
+    cols.push(<CardItem key={i} cardIndex={i} totalCount={colCount - 1} addColsHandle={() => {
+      setColCount(colCount + 1);
     }} />)
   }
 
@@ -247,7 +238,7 @@ const Index = (props) => {
       season: seasonSendData,
     };
     console.log(addData)
-    if(!locationSendID.length || !levelSendData.length || !daySendData.length || !timeSendData.length || !seasonSendData.length) {
+    if (!locationSendID.length || !levelSendData.length || !daySendData.length || !timeSendData.length || !seasonSendData.length) {
       messageApi.open({
         type: 'error',
         content: 'Please input at least one field set and click PLUS (+) button.',
@@ -271,7 +262,7 @@ const Index = (props) => {
     <>
       {contextHolder}
       <Header />
-      <Container fluid style={{paddingTop: '5%', paddingBottom: '20%'}}>
+      <Container fluid style={{ paddingTop: '5%', paddingBottom: '20%' }}>
         <Card className="shadow">
           <CardHeader className="bg-transparent">
             <Row className="align-items-center">
@@ -287,9 +278,9 @@ const Index = (props) => {
             <Row gutter={[0, 8]}>
               {cols}
             </Row>
-            <Row style={{marginTop:"20px"}}>
+            <Row style={{ marginTop: "20px" }}>
               <Col span={2} offset={20}>
-                <Button type="primary" shape="round" size={"large"} onClick={onFinish}>Continue<ArrowRightOutlined style={{display: `inline-flex`}} /></Button>
+                <Button type="primary" shape="round" size={"large"} onClick={onFinish}>Continue<ArrowRightOutlined style={{ display: `inline-flex` }} /></Button>
               </Col>
             </Row>
           </CardBody>
