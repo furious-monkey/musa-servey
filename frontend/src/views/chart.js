@@ -206,24 +206,24 @@ const Index = () => {
   return (
     <>
       {contextHolder}
-      <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
+      <div className="header bg-gradient-info pb-8 pt-8">
         <Container fluid>
           <div className="header-body">
-            <Row>
-              <Col lg="6" xl="2">
-                <h3 style={{ color: "white", textAlign: "end" }}>Search Option:</h3>
+            <Row className="chart-input">
+              <Col className="chart-search">
+                <h3 style={{ color: "white", textAlign: "center" }}>Search Option:</h3>
               </Col>
-              <Col lg="6" xl="2">
+              <Col className="chart-search">
                 <Input
                   id="searchTextField"
                   onChange={onChangeLocation}
                   value={location ? location : ''}
-                  placeholder="Name of park you want"
+                  placeholder="Park you want to know about"
                 />
               </Col>
-              <Col lg="6" xl="2">
+              <Col className="chart-search">
                 <Select
-                  placeholder="Select the level"
+                  placeholder="Season"
                   style={{ width: "100%" }}
                   onChange={onChangeSeason}
                   options={[
@@ -246,9 +246,9 @@ const Index = () => {
                   ]}
                 />
               </Col>
-              <Col lg="6" xl="2">
+              <Col className="chart-search">
                 <Select
-                  placeholder="What day(s) do you go?"
+                  placeholder="Day"
                   style={{ width: "100%" }}
                   onChange={onChangeDay}
                   options={[
@@ -275,7 +275,7 @@ const Index = () => {
                   ]}
                 />
               </Col>
-              <Col lg="6" xl="1">
+              <Col className="chart-search">
                 <Button icon={<SearchOutlined />} onClick={() => {
                   if (!location) {
                     messageApi.open({
