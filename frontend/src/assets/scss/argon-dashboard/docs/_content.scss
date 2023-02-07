@@ -7,6 +7,59 @@
     }
 }
 
+@media screen and (min-width: 1100px) {
+    .col-content {
+        width: 16%
+    }
+    .plus-button {
+        text-align-last: revert
+    }
+    .continue-button {
+        margin-right: 30px
+    }
+    .button-div {
+        text-align: right
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .col-content {
+        width: 100%
+    }
+    .plus-button {
+        text-align-last: center
+    }
+    .button-div {
+        text-align: center
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .small-header {
+        text-align: left
+    }
+    .small-header-button {
+        text-align: right
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .small-header {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .small-header-button {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
+.content-input {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+}
+
 .ct-content {
     order: 1;
 
