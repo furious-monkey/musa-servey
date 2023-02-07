@@ -218,12 +218,12 @@ const Index = () => {
                   id="searchTextField"
                   onChange={onChangeLocation}
                   value={location ? location : ''}
-                  placeholder="Name of park you want"
+                  placeholder="Park you want to know about"
                 />
               </Col>
               <Col lg="6" xl="2">
                 <Select
-                  placeholder="Select the level"
+                  placeholder="Season"
                   style={{ width: "100%" }}
                   onChange={onChangeSeason}
                   options={[
@@ -248,7 +248,7 @@ const Index = () => {
               </Col>
               <Col lg="6" xl="2">
                 <Select
-                  placeholder="What day(s) do you go?"
+                  placeholder="Day"
                   style={{ width: "100%" }}
                   onChange={onChangeDay}
                   options={[

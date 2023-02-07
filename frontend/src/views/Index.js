@@ -42,19 +42,44 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
 
   const onChangeLevel = (value) => {
     setLevel(value);
+    if(levelSendData.length === 0) {
+      console.log("level: ", value);
+      levelSendData.push(value)
+    }
   };
   const onChangeTime = (value) => {
     setTime(value);
+    if(timeSendData.length === 0) {
+      console.log("time: ", value);
+      timeSendData.push(value)
+    }
   };
   const onChangeSeason = (value) => {
     setSeason(value);
+    if(seasonSendData.length === 0) {
+      console.log("season: ", value);
+      seasonSendData.push(value)
+    }
   };
   const onChangeDay = (value) => {
     setDay(value);
+    if(daySendData.length === 0) {
+      console.log("day: ", value);
+      daySendData.push(value)
+    }
   };
   const onChangeLocation = (e) => {
-    if (e.target !== undefined) setLocation(e.target.value);
-    else setLocation(e.name);
+    if (e.target !== undefined) {
+      console.log("location: ", e.target.value);
+      setLocation(e.target.value);
+    }
+    else {
+      setLocation(e.name);
+      if(locationSendID.length === 0) {
+        console.log("location: ", e.name);
+        locationSendID.push(e.name)
+      }
+    }
   };
   const addColsHandler = () => {
     levelSendData.push(levelData)
@@ -158,7 +183,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
             </Col>
             <Col className="col-content">
               <Select
-                placeholder="Select the level"
+                placeholder="Skill Level"
                 style={{ width: "100%" }}
                 onChange={onChangeLevel}
                 options={[
@@ -179,7 +204,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
             </Col>
             <Col className="col-content">
               <Select
-                placeholder="Select the level"
+                placeholder="Season"
                 style={{ width: "100%" }}
                 onChange={onChangeSeason}
                 options={[
