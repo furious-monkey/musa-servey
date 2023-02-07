@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Modal, Form, Input, Checkbox, Tabs, message } from "antd";
+import { Button, Modal, Form, Input, Checkbox, Tabs, message, Row, Col } from "antd";
 import { MailOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import {
   Navbar,
@@ -234,16 +234,21 @@ const AdminNavbar = (props) => {
     <>
       {contextHolder}
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
-        <Container fluid>
-          <Link
-            className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-            to="/"
-          >
-            {props.brandText}
-          </Link>
-          {console.log(signin)}
-          {!signin ? <Button shape="round" size={"large"} onClick={showModal}><UserOutlined style={{ display: `inline-flex` }} />SignIn/SignUp</Button> : <UserOutlined />}
-        </Container>
+        <div style={{width:'-webkit-fill-available'}}>
+          <Row className="content-input">
+            <Col xs={24} sm={12} md={12} className="small-header">
+              <Link
+                className="h4 mb-0 text-white text-uppercase"
+                to="/"
+              >
+                {props.brandText}
+              </Link>
+            </Col>
+            <Col xs={24} sm={12} md={12} className="small-header-button">
+              {!signin ? <Button shape="round" onClick={showModal}><UserOutlined style={{ display: `inline-flex` }} />SignIn/SignUp</Button> : <UserOutlined />}
+            </Col>
+          </Row>
+        </div>
       </Navbar>
       <Modal
         title="Sign In"

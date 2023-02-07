@@ -84,8 +84,8 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
     <>
       <Col span={24}>
         <Card style={{ border: 'none' }}>
-          <Row gutter={[3, 8]}>
-            <Col span={4} offset={2}>
+          <Row gutter={[3, 8]} className="content-input">
+            <Col className="col-content">
               <Input
                 style={{ width: "100%" }}
                 id={"searchTextField" + cardIndex}
@@ -94,7 +94,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 placeholder="What park do you go to?"
               />
             </Col>
-            <Col span={4}>
+            <Col className="col-content">
               <Select
                 placeholder="What day(s) do you go?"
                 style={{ width: "100%" }}
@@ -123,7 +123,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 ]}
               />
             </Col>
-            <Col span={4}>
+            <Col className="col-content">
               <Select
                 placeholder="Select Time"
                 style={{ width: "100%" }}
@@ -156,7 +156,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 ]}
               />
             </Col>
-            <Col span={4}>
+            <Col className="col-content">
               <Select
                 placeholder="Select the level"
                 style={{ width: "100%" }}
@@ -177,7 +177,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 ]}
               />
             </Col>
-            <Col span={4}>
+            <Col className="col-content">
               <Select
                 placeholder="Select the level"
                 style={{ width: "100%" }}
@@ -202,7 +202,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 ]}
               />
             </Col>
-            <Col style={{ textAlignLast: `revert` }} span={2}>
+            <Col className="col-content plus-button">
               {
                 cardIndex === totalCount
                   ? <Button type="primary" disabled={addState} shape="circle" onClick={addColsHandler} style={{ marginTop: '4px', marginLeft: "10px" }} icon={<PlusOutlined style={{ display: "block" }} />} size={"small"} />
@@ -277,12 +277,11 @@ const Index = (props) => {
           <CardBody>
             <Row gutter={[0, 8]}>
               {cols}
+              <div class="ant-col ant-col-24 css-dev-only-do-not-override-1i9hnpv button-div">
+                <Button type="primary" shape="round" onClick={onFinish} className="continue-button">Continue<ArrowRightOutlined style={{ display: `inline-flex` }} /></Button>
+              </div>
             </Row>
-            <Row style={{ marginTop: "20px" }}>
-              <Col span={2} offset={20}>
-                <Button type="primary" shape="round" size={"large"} onClick={onFinish}>Continue<ArrowRightOutlined style={{ display: `inline-flex` }} /></Button>
-              </Col>
-            </Row>
+            
           </CardBody>
         </Card>
       </Container>
