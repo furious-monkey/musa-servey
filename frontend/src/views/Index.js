@@ -116,7 +116,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
                 id={"searchTextField" + cardIndex}
                 onChange={onChangeLocation}
                 value={locationData ? locationData : ""}
-                placeholder="What park do you go to?"
+                placeholder="What basketball park do you go to?"
               />
             </Col>
             <Col className="col-content">
@@ -183,7 +183,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
             </Col>
             <Col className="col-content">
               <Select
-                placeholder="Skill Level"
+                placeholder="What level of player are you?"
                 style={{ width: "100%" }}
                 onChange={onChangeLevel}
                 options={[
@@ -204,25 +204,25 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
             </Col>
             <Col className="col-content">
               <Select
-                placeholder="Season"
+                placeholder="When (What season)?"
                 style={{ width: "100%" }}
                 onChange={onChangeSeason}
                 options={[
                   {
                     value: "Spring",
-                    label: "Spring",
+                    label: "Spring - March, April, May",
                   },
                   {
                     value: "Summer",
-                    label: "Summer",
+                    label: "Summer - June, July, August",
                   },
                   {
                     value: "Fall",
-                    label: "Fall",
+                    label: "Fall - September, October, November",
                   },
                   {
                     value: "Winter",
-                    label: "Winter",
+                    label: "Winter - December, January, February",
                   },
                 ]}
               />

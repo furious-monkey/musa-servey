@@ -229,19 +229,19 @@ const Index = () => {
                   options={[
                     {
                       value: "Spring",
-                      label: "Spring",
+                      label: "Spring - March, April, May",
                     },
                     {
                       value: "Summer",
-                      label: "Summer",
+                      label: "Summer - June, July, August",
                     },
                     {
                       value: "Fall",
-                      label: "Fall",
+                      label: "Fall - September, October, November",
                     },
                     {
                       value: "Winter",
-                      label: "Winter",
+                      label: "Winter - December, January, February",
                     },
                   ]}
                 />
