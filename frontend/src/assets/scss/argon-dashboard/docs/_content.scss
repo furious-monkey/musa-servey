@@ -11,12 +11,15 @@
     .col-content {
         width: 16%
     }
+
     .plus-button {
         text-align-last: revert
     }
+
     .continue-button {
         margin-right: 30px
     }
+
     .button-div {
         text-align: right
     }
@@ -26,14 +29,21 @@
     .col-content {
         width: 100%
     }
+
     .plus-button {
         text-align-last: center
     }
+
     .button-div {
         text-align: center
     }
 }
 
+.custom-css {
+    display: block;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
 
 .chart-search {
     width: 20%;
@@ -56,6 +66,7 @@
     .small-header {
         text-align: left
     }
+
     .small-header-button {
         text-align: right
     }
@@ -66,6 +77,7 @@
         text-align: center;
         margin-bottom: 10px;
     }
+
     .small-header-button {
         text-align: center;
         margin-bottom: 10px;
@@ -119,14 +131,18 @@
             display: block;
             overflow-x: auto;
             -ms-overflow-style: -ms-autohiding-scrollbar; // See https://github.com/twbs/bootstrap/pull/10057
+
             &.table-bordered {
                 border: 0;
             }
-        } // Cells
+        }
+
+        // Cells
         >thead,
         >tbody,
         >tfoot {
             >tr {
+
                 >th,
                 >td {
                     padding: $table-cell-padding;
@@ -138,7 +154,9 @@
                     }
                 }
             }
-        } // Prevent breaking of code (e.g., Grunt tasks list)
+        }
+
+        // Prevent breaking of code (e.g., Grunt tasks list)
         td:first-child>code {
             white-space: nowrap;
         }
@@ -167,6 +185,7 @@
     }
 
     @include media-breakpoint-up(lg) {
+
         >ul,
         >ol,
         >p {
