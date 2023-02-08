@@ -42,28 +42,28 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
 
   const onChangeLevel = (value) => {
     setLevel(value);
-    if(levelSendData.length === 0) {
+    if (levelSendData.length === 0) {
       console.log("level: ", value);
       levelSendData.push(value)
     }
   };
   const onChangeTime = (value) => {
     setTime(value);
-    if(timeSendData.length === 0) {
+    if (timeSendData.length === 0) {
       console.log("time: ", value);
       timeSendData.push(value)
     }
   };
   const onChangeSeason = (value) => {
     setSeason(value);
-    if(seasonSendData.length === 0) {
+    if (seasonSendData.length === 0) {
       console.log("season: ", value);
       seasonSendData.push(value)
     }
   };
   const onChangeDay = (value) => {
     setDay(value);
-    if(daySendData.length === 0) {
+    if (daySendData.length === 0) {
       console.log("day: ", value);
       daySendData.push(value)
     }
@@ -75,7 +75,7 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
     }
     else {
       setLocation(e.name);
-      if(locationSendID.length === 0) {
+      if (locationSendID.length === 0) {
         console.log("location: ", e.name);
         locationSendID.push(e.name)
       }
@@ -302,11 +302,11 @@ const Index = (props) => {
           <CardBody>
             <Row gutter={[0, 8]}>
               {cols}
-              <div class="ant-col ant-col-24 css-dev-only-do-not-override-1i9hnpv button-div">
+              <div class="ant-col ant-col-24 custom-css button-div">
                 <Button type="primary" shape="round" onClick={onFinish} className="continue-button">Continue<ArrowRightOutlined style={{ display: `inline-flex` }} /></Button>
               </div>
             </Row>
-            
+
           </CardBody>
         </Card>
       </Container>
