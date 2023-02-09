@@ -76,18 +76,19 @@ const CardItem = ({ cardIndex, totalCount, addColsHandle, removeColsHandle }) =>
     else {
       setLocation(e.name);
       if (locationSendID.length === 0) {
-        console.log("location: ", e.name);
-        locationSendID.push(e.name)
+        locationSendID.push(e.id)
       }
     }
   };
   const addColsHandler = () => {
-    levelSendData.push(levelData)
-    daySendData.push(dayData)
-    timeSendData.push(timeData)
-    seasonSendData.push(seasonData)
-    locationSendID.push(locationID)
-    addColsHandle()
+    if(levelSendData.length !== 0) {
+      levelSendData.push(levelData)
+      daySendData.push(dayData)
+      timeSendData.push(timeData)
+      seasonSendData.push(seasonData)
+      locationSendID.push(locationID)
+      addColsHandle()
+    }
   }
   let google = window.google;
   let input = document.getElementById("searchTextField" + cardIndex);
