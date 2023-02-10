@@ -46,7 +46,10 @@ const Index = () => {
 
   const onChangeLocation = (e) => {
     if (e.target !== undefined) setLocation(e.target.value);
-    else setLocation(e.name);
+    else {
+      setLocation(e.name);
+      setLocationID(e.id);
+    }
   }
 
   const onChangeSeason = (value) => {
@@ -84,6 +87,8 @@ const Index = () => {
       season: seasonData,
       day: dayData
     }
+
+    console.log(data);
 
     let result;
     axios.post(process.env.REACT_APP_API_URL + "/survey/getSurvey", data)

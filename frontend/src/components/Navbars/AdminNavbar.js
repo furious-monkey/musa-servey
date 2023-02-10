@@ -16,6 +16,16 @@ const AdminNavbar = (props) => {
   const [signin, setSignin] = useState(localStorage.getItem('signin') ? true : false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [first, setFirst] = useState(true);
+
+  if(props.modalState) {
+    setTimeout(function() {
+      if (first && !localStorage.getItem('signin')) {
+        setFirst(false)
+        setOpen(true)
+      }
+    }, 5000)
+  }
 
   const showModal = () => {
     setOpen(true);

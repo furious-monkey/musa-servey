@@ -45,11 +45,18 @@ const Admin = (props) => {
     return "Brand";
   };
 
+  const getModalState = (path) => {
+    if(path == "/admin/chart")
+      return true;
+    return false;
+  }
+
   return (
     <div className="main-content" ref={mainContent}>
       <AdminNavbar
         {...props}
         brandText={getBrandText(props.location.pathname)}
+        modalState = {getModalState(props.location.pathname)}
       />
       <Switch style={{ minHeight: '100%' }}>
         {getRoutes(routes)}
