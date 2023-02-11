@@ -11,18 +11,26 @@ app.use(bodyParser.json());
 app.use("/api/survey", survey_routes);
 app.use("/api/user", user_routes);
 
-global.db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "",
-  database: "musadb",
-});
+function createDBConnection() {
+  console.log("Creating DB connection...");
+  global.db = mysql.createConnection({
+    user: "root",
+    host: "localhost",
+    password: "",
+    database: "musadb",
+  });
 
-db.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected to MySQL!");
-  console.log("Success!");
-});
+  db.connect(function (err) {
+    if (err) {
+      createDBConnection();
+    }
+    console.log("Connected to MySQL!");
+    console.log("Success!");
+  });
+
+}
+
+createDBConnection();
 
 app.listen(5000, () => {
   console.log("Server started at http://localhost:5000");
